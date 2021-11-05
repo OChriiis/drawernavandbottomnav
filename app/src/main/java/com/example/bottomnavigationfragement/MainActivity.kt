@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     //Botões
     lateinit var btnHome: Button
@@ -24,8 +25,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var bottomNavigation: BottomNavigationView
 
+    lateinit var navigation: NavigationView
+
     //Toolbar
     lateinit var toolbar: Toolbar
+
+    //
+    lateinit var drawer: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         homeFragment = HomeFragment()
 
         bottomNavigation = findViewById(R.id.bottom_navigation)
+
+        navigation = findViewById(R.id.navigation)
+
+        drawer = findViewById(R.id.drawer)
 
         setFragment(homeFragment)
 
@@ -62,6 +72,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener{ item ->
             onNavigationItemSelected(item)
         }
+        drawer.addDrawerListener()
+        navigation.setNavigationItemSelectedListener(this)
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -70,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    fun onNavigationItemSelected(item: MenuItem): Boolean {
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId){
             R.id.menu_home -> {
